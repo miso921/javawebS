@@ -1,5 +1,6 @@
 package com.spring.javawebS.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -38,6 +39,13 @@ public class GuestServiceImpl implements GuestService {
 	public int totRecCnt() {
 		return guestDAO.totRecCnt();
 	}
+
+	@Override
+	public int setGuestDelete(int idx) {
+		
+		return guestDAO.setGuestDelete(idx);
+	}
+
 
 
 }

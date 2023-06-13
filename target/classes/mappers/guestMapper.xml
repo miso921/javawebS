@@ -14,4 +14,11 @@
 	<insert id="setGuestInput">
 		insert into guest2 values (default, #{vo.name}, #{vo.content}, #{vo.email}, #{vo.homePage}, default, #{vo.hostIp});
 	</insert>
+	
+	
+	
+	<delete id="setGuestDelete">
+		delete from guest2 where idx = #{idx};
+	</delete>
+	
 </mapper>

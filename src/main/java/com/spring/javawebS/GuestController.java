@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.javawebS.pagination.PageProcess;
+import com.spring.javawebS.pagination.PageVO;
 import com.spring.javawebS.service.GuestService;
 import com.spring.javawebS.vo.GuestVO;
 
@@ -20,13 +22,17 @@ import com.spring.javawebS.vo.GuestVO;
 public class GuestController {
 	
 	@Autowired
-	GuestService guestService;
+	GuestService guestService; // 협업 시 규칙성을 위해 인터페이스를 거쳐서 impl 순으로 작업하는 것 뿐!
+	
+	@Autowired
+	PageProcess pageProcess;
 	
 	@RequestMapping(value = "/guestList", method = RequestMethod.GET)
 	public String guestListGet(
 			@RequestParam(name="pag", defaultValue="1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue="3", required = false) int pageSize,
 			Model model) {
+		/*
 		int totRecCnt = guestService.totRecCnt(); // 게시글 전체 가져오기
 		int totPage = (totRecCnt % pageSize)== 0 ? totRecCnt / pageSize : (totRecCnt / pageSize) + 1;   // 나머지가 떨어지지 않으면 +1을 하여 전체 페이지 수를 맞춘다.
 		int startIndexNo = (pag - 1) * pageSize; // 게시글 시작하는 번호
@@ -38,7 +44,6 @@ public class GuestController {
 		
 		List<GuestVO> vos = guestService.getGuestList(startIndexNo, pageSize);
 		
-		model.addAttribute("vos",vos);
 		model.addAttribute("pag",pag);
 		model.addAttribute("pageSize",pageSize);
 		model.addAttribute("totRecCnt",totRecCnt);
@@ -47,6 +52,14 @@ public class GuestController {
 		model.addAttribute("blockSize",blockSize);
 		model.addAttribute("curBlock",curBlock);
 		model.addAttribute("lastBlock",lastBlock);
+    */
+		
+		PageVO pageVo = pageProcess.totRecCnt(pag, pageSize,"guest", "", "");  // 어느 게시판에서 넘겼는지 게시판 이름 같이 넘기기(section), part는 게시판 별 분류인데 방명록은 part가 없기 때문에 ""값 전달
+			                                                                     // 검색기를 위한 분류도 넘겨야하는데 방명록은 검색기가 없기 때문에 그냥 ""을 넘긴다.
+		List<GuestVO> vos = guestService.getGuestList(pageVo.getStartIndexNo(), pageSize); // pageSize는 vo에 있는 값을 가져와도 되고 위에서 받은 값을 가져와도 같아서 상관없음! 하지만 pageVO에서 pageSize는 저장되어 있어야 view에서 출력 가능!
+		
+		model.addAttribute("vos",vos); 
+		model.addAttribute("pageVo",pageVo);
 		
 		return "guest/guestList";
 	}
@@ -79,6 +92,7 @@ public class GuestController {
 		return "redirect:/message/adminLogout";
 	}
 	
+	// 방명록 관리자 로그인
 	@RequestMapping(value = "/adminLogin", method = RequestMethod.POST)
 	public String adminLoginPost(HttpServletRequest request,
 			@RequestParam(name="mid", defaultValue="", required=false) String mid,
@@ -93,4 +107,12 @@ public class GuestController {
 		else return "redirect:/message/guestAdminNo";
 	}
 	
+	// 방명록 글 삭제
+	@RequestMapping(value = "/guestDelete", method = RequestMethod.GET)
+	public String guestDeleteGet(@RequestParam(name = "idx", defaultValue = "0", required = false) int idx) {
+		int res = guestService.setGuestDelete(idx);
+		
+		if(res == 1) return "redirect:/message/guestDeleteOk";
+		else return "redirect:/message/guestDeleteNo";
+	}
 }

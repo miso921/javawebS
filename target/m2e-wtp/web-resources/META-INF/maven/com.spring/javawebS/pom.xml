@@ -185,7 +185,21 @@
 	    <artifactId>jackson-mapper-asl</artifactId>
 	    <version>1.9.13</version>
 		</dependency>
-		      
+		
+		<!-- SMTP를 이용한 Java Web Mail 서비스 라이브러리 주입(2개) 메일을 보내기 위한 라이브러리(javax.mail 검색) -->
+		<!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+		<dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>mail</artifactId>
+	    <version>1.4.7</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+		<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context-support</artifactId>
+	    <version>5.3.18</version>
+		</dependency>
+				      
 	</dependencies>
     <build>
         <plugins>
