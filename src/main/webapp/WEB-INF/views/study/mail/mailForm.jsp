@@ -75,7 +75,7 @@
 
       <!-- Modal Header -->
       <div class="modal-header">
-        <h4 class="modal-title">주 소 록</h4>
+        <h4 class="modal-title">주 소 록👍</h4>
         <button type="button" class="close" data-dismiss="modal">&times;</button>
       </div>
 
